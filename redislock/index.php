@@ -49,7 +49,7 @@ try {
             echo '下单成功';
             echo '<hr>';
         }else{
-            //todo 要做成类似while.等待1秒后继续上锁
+            //等待1秒后继续上锁
             sleep(1);
         }
     }
