@@ -27,6 +27,7 @@ echo '<hr>';
 
 
 //php 反射
+//前置判断
 $class = new ReflectionClass("test");
 if($class->hasConstant("TEST_NULL")){//检查类中是否已经定义了指定的常量
     $value = test::getConst('null');
@@ -37,17 +38,27 @@ if($class->hasConstant("TEST_NULL")){//检查类中是否已经定义了指定�
     echo '<hr>';
 }
 
-
+$value = test::getConst('null1');
 
 class test{
     const TEST_NULL = NULL;
     const TEST_ZERO = 0;
     const TEST_ONE  = 1;
 
+    private static $_class = NULL;
     public static function getConst($str){
         // $value = self::{"TEST_".strtoupper($str)};//这样会报错
         // $str   = "TEST_".strtoupper($str);
         // $value = self::{$str};//这样会报错
-        return constant(__CLASS__."::TEST_".strtoupper($str));//这样可以动态的获取类常量的值
+        //类里面判断
+        if(self::$_class === NULL){
+            self::$_class = new ReflectionClass(__CLASS__);
+        }
+        $isSet = self::$_class->hasConstant('TEST_'.strtoupper($str));
+        if($isSet){
+            return constant(__CLASS__."::TEST_".strtoupper($str));//这样可以动态的获取类常量的值
+        }else{
+            throw new Exception("没有定义类常量", 1);
+        }
     }
 }
