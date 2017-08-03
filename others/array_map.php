@@ -31,3 +31,13 @@ echo "<pre>";
     print_r($useC);
 echo "</pre>";
 echo '<hr>';
+
+
+//use 引用
+$func  = function($value) use ($useA,$useB,&$useC){
+    $useC = 'D';
+    return $value . $useA . $useB;
+};
+
+$test = array_map($func,$array);
+var_dump($useC);
